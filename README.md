@@ -37,12 +37,14 @@ The directory structure is organized as follows:
 ├── downloads/           <- All downloads shared across services
 ├── media/               <- All media content
 │   ├── tv/              <- TV shows for Sonarr
-│   └── movies/          <- Movies for Radarr
+│   ├── movies/          <- Movies for Radarr
+│   └── music/           <- Music for Lidarr
 │
 └── docker/              <- Your docker-compose.yml location
     └── config/          <- All container configurations
         ├── sonarr/
         ├── radarr/
+        ├── lidarr/
         ├── qbittorrent/
         ├── prowlarr/
         ├── jellyfin/
@@ -61,11 +63,11 @@ mkdir -p ~/mediaserver
 cd ~/mediaserver
 
 # Create the required subdirectories
-mkdir -p downloads media/tv media/movies docker/config
+mkdir -p downloads media/tv media/movies media/music docker/config
 cd docker
 
 # Create config subdirectories
-mkdir -p config/sonarr config/radarr config/qbittorrent config/prowlarr config/jellyfin config/jellyseerr
+mkdir -p config/sonarr config/radarr config/lidarr config/qbittorrent config/prowlarr config/jellyfin config/jellyseerr
 ```
 
 ### 2. Set Up Docker and Docker Compose
@@ -139,7 +141,11 @@ QBittorrent handles download management.
    - Set your download path to `/downloads`
    - Configure your download limits
    - Enable "Start torrent with added torrents paused" if you want manual control
-6. Go to "Settings" → "WebUI"
+6. In "Settings" → "BitTorrent", create categories:
+   - Add category: `tv-sonarr` (for Sonarr)
+   - Add category: `movies-radarr` (for Radarr)
+   - Add category: `music-lidarr` (for Lidarr)
+7. Go to "Settings" → "WebUI"
    - Configure authentication settings
    - Enable HTTPS if needed
 
@@ -197,7 +203,34 @@ Radarr handles movies.
      - API Key: (copy from Radarr → Settings → General)
      - Click "Test" and then "Save"
 
-### 5. Jellyfin Setup
+### 5. Lidarr Setup
+
+Lidarr handles music collections.
+
+1. Access Lidarr at `http://your-server-ip:8686`
+2. Go to "Settings" → "Media Management"
+   - Enable "Rename Tracks"
+   - Configure "Root Folders" to `/music`
+3. Go to "Settings" → "Download Clients"
+   - Add QBittorrent
+     - Name: QBittorrent
+     - Host: qbittorrent (use the container name)
+     - Port: 8080
+     - Username: admin
+     - Password: (the password you set in QBittorrent)
+     - Category: music-lidarr
+4. Return to Prowlarr to configure the connection to Lidarr:
+   - In Prowlarr, go to "Settings" → "Apps"
+   - Click "+ Add App"
+     - Application: Lidarr
+     - Sync Level: Full Sync
+     - Name: Lidarr
+     - Prowlarr Server: http://prowlarr:9696
+     - Lidarr Server: http://lidarr:8686
+     - API Key: (copy from Lidarr → Settings → General)
+     - Click "Test" and then "Save"
+
+### 6. Jellyfin Setup
 
 Jellyfin is your media server.
 
@@ -213,11 +246,15 @@ Jellyfin is your media server.
      - Content Type: TV Shows
      - Display Name: TV Shows
      - Folder: `/media/tv`
+   - Add a Music library:
+     - Content Type: Music
+     - Display Name: Music
+     - Folder: `/media/music`
 5. Let Jellyfin scan your libraries (this may take time if you already have media)
 6. Configure transcoding settings based on your server hardware
 7. Set up remote access if needed
 
-### 6. Jellyseerr Setup
+### 7. Jellyseerr Setup
 
 Jellyseerr provides a request system for your media server.
 
