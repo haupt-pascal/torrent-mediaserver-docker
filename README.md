@@ -1,5 +1,7 @@
 # Media Server Stack - Setup Guide
 
+## Because Subscriptions are... (╯°□°)╯︵ ┻━┻
+
 This guide provides detailed instructions for setting up a complete media server stack using Docker Compose, including Sonarr, Radarr, QBittorrent, Prowlarr, Jellyfin, and Jellyseerr.
 
 ## Table of Contents
@@ -16,8 +18,9 @@ This guide provides detailed instructions for setting up a complete media server
   - [2. QBittorrent Setup](#2-qbittorrent-setup)
   - [3. Sonarr Setup](#3-sonarr-setup)
   - [4. Radarr Setup](#4-radarr-setup)
-  - [5. Jellyfin Setup](#5-jellyfin-setup)
-  - [6. Jellyseerr Setup](#6-jellyseerr-setup)
+  - [5. Lidarr Setup](#5-lidarr-setup)
+  - [6. Jellyfin Setup](#6-jellyfin-setup)
+  - [7. Jellyseerr Setup](#7-jellyseerr-setup)
 - [Maintenance](#maintenance)
 - [Troubleshooting](#troubleshooting)
 
