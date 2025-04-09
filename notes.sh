@@ -16,3 +16,4 @@ sudo apt install cpufrequtils -y
 sudo systemctl disable ondemand
 sudo bash -c 'echo "GOVERNOR=performance" > /etc/default/cpufrequtils'
 sudo systemctl restart cpufrequtils
+docker system prune -a --volumes
