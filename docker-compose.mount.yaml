@@ -98,6 +98,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
+      - JELLYFIN_ffmpeg__enableHardwareEncoding=true
+      - JELLYFIN_HardwareAccelerationType=vaapi
     volumes:
       - ./config/jellyfin:/config
       - /mnt/synology/pascal:/media
@@ -107,6 +109,8 @@ services:
       - 7359:7359/udp # service discover
       - 1900:1900/udp # dlna
     restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
     networks:
       - media-net
     hostname: jellyfin
