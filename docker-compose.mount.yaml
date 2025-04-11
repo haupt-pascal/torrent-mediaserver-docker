@@ -73,6 +73,25 @@ services:
       - media-net
     hostname: qbittorrent
 
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/deluge:/config
+      - /mnt/synology/pascal:/downloads
+    ports:
+      - 8112:8112 # WebUI
+      - 6882:6882 # Incoming connections
+      - 6882:6882/udp # DHT
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: deluge
+
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
