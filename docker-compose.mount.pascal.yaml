@@ -127,7 +127,8 @@ services:
       - jellyfin
       - radarr
       - sonarr
-  sabnzbd:
+
+  # sabnzbd:
     image: lscr.io/linuxserver/sabnzbd:latest
     container_name: sabnzbd
     environment:
