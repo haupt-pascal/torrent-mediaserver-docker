@@ -1,0 +1,150 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/sonarr:/config
+      - /mnt/synology/pascal/tv-shows:/tv
+      - /mnt/synology/pascal:/downloads
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: sonarr
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/radarr:/config
+      - /mnt/synology/pascal/movies:/movies
+      - /mnt/synology/pascal:/downloads
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: radarr
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/lidarr:/config
+      - /mnt/synology/pascal/music:/music
+      - /mnt/synology/pascal:/downloads
+    ports:
+      - 8686:8686
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: lidarr
+  qbittorrent-nox:
+    image: qbittorrentofficial/qbittorrent-nox:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - WEBUI_PORT=8080
+    volumes:
+      - ./config/qbittorrent-nox:/config
+      - /mnt/synology/pascal:/downloads
+      - ./vuetorrent:/vuetorrent
+    ports:
+      - 8080:8080
+      - 6881:6881
+      - 6881:6881/udp
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: qbittorrent
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: prowlarr
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - JELLYFIN_ffmpeg__enableHardwareEncoding=true
+      - JELLYFIN_HardwareAccelerationType=vaapi
+    volumes:
+      - ./config/jellyfin:/config
+      - /mnt/synology/pascal:/media
+    ports:
+      - 8096:8096
+      - 8920:8920 # https port (optional)
+      - 7359:7359/udp # service discover
+      - 1900:1900/udp # dlna
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    networks:
+      - media-net
+    hostname: jellyfin
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/jellyseerr:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: jellyseerr
+    depends_on:
+      - jellyfin
+      - radarr
+      - sonarr
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/sabnzbd:/config
+      - /mnt/synology/pascal:/downloads
+      - /mnt/synology/pascal/incomplete-downloads:/incomplete-downloads #optional
+    ports:
+      - 8090:8080
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: sabnzbd
+
+networks:
+  media-net:
+    driver: bridge
