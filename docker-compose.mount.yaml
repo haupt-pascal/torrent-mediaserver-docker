@@ -178,6 +178,24 @@ services:
       - media-net
     hostname: nzbget
 
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/sabnzbd:/config
+      - /mnt/synology/pascal:/downloads
+      - /mnt/synology/pascal/incomplete-downloads:/incomplete-downloads #optional
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: sabnzbd
+
 networks:
   media-net:
     driver: bridge
