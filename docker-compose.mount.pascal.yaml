@@ -50,6 +50,23 @@ services:
     networks:
       - media-net
     hostname: lidarr
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - ./config/readarr:/config
+      - /mnt/synology/pascal/books:/books
+      - /mnt/synology/pascal:/downloads
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+    networks:
+      - media-net
+    hostname: readarr
   qbittorrent-nox:
     image: qbittorrentofficial/qbittorrent-nox:latest
     container_name: qbittorrent
@@ -127,24 +144,6 @@ services:
       - jellyfin
       - radarr
       - sonarr
-
-  # sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    volumes:
-      - ./config/sabnzbd:/config
-      - /mnt/synology/pascal:/downloads
-      - /mnt/synology/pascal/incomplete-downloads:/incomplete-downloads #optional
-    ports:
-      - 8090:8080
-    restart: unless-stopped
-    networks:
-      - media-net
-    hostname: sabnzbd
 
 networks:
   media-net:
