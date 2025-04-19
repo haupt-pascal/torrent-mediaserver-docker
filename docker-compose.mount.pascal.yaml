@@ -10,6 +10,7 @@ services:
       - ./config/sonarr:/config
       - /mnt/synology/pascal/tv-shows:/tv
       - /mnt/synology/pascal:/downloads
+      - /mnt/synology/pascal/completed:/downloads-completed
     ports:
       - 8989:8989
     restart: unless-stopped
@@ -27,6 +28,7 @@ services:
       - ./config/radarr:/config
       - /mnt/synology/pascal/movies:/movies
       - /mnt/synology/pascal:/downloads
+      - /mnt/synology/pascal/completed:/downloads-completed
     ports:
       - 7878:7878
     restart: unless-stopped
@@ -44,6 +46,7 @@ services:
       - ./config/lidarr:/config
       - /mnt/synology/pascal/music:/music
       - /mnt/synology/pascal:/downloads
+      - /mnt/synology/pascal/completed:/downloads-completed
     ports:
       - 8686:8686
     restart: unless-stopped
@@ -61,6 +64,7 @@ services:
       - ./config/readarr:/config
       - /mnt/synology/pascal/books:/books
       - /mnt/synology/pascal:/downloads
+      - /mnt/synology/pascal/completed:/downloads-completed
     ports:
       - 8787:8787
     restart: unless-stopped
