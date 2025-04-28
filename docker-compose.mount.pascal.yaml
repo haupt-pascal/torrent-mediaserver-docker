@@ -94,21 +94,23 @@ services:
     networks:
       - media-net
     hostname: qbittorrent
-  prowlarr:
-    image: lscr.io/linuxserver/prowlarr:latest
-    container_name: prowlarr
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
     environment:
       - PUID=0
       - PGID=0
       - TZ=Etc/UTC
+      - AUTO_UPDATE=true
     volumes:
-      - ./config/prowlarr:/config
+      - ./config/jackett:/config
+      - /mnt/synology/pascal:/downloads
     ports:
-      - 9696:9696
+      - 9117:9117
     restart: unless-stopped
     networks:
       - media-net
-    hostname: prowlarr
+    hostname: jackett
   jellyfin:
     image: lscr.io/linuxserver/jellyfin:latest
     container_name: jellyfin
