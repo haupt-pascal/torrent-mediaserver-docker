@@ -87,6 +87,8 @@ services:
     ports:
       - 8080:8080
       - 6881:6881
+      - 54232:54232
+      - 63333:63333
       - 6881:6881/udp
     restart: unless-stopped
     networks:
